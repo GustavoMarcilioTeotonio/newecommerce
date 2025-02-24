@@ -21,13 +21,22 @@ public class ProductService {
         return productDTO;
     }
 
+    @Transactional(readOnly = true)
     public List<ProductDTO> findAll() {
         List<Product> products = productRepository.findAll();
         return products.stream().map(product -> productToProductDTO(product)).toList();
     }
 
+    @Transactional
+    public ProductDTO create(ProductDTO productDTO) {
+        Product product = productDTOToProduct(productDTO);
+        Product savedProduct = productRepository.save(product);
+        return productToProductDTO(savedProduct);
+
+    }
+
     public ProductDTO productToProductDTO(Product product) {
-        ProductDTO productDTO = new ProductDTO();
+        ProductDTO productDTO = new ProductDTO(product.getId(), product.getName(), product.getDescription(), product.getPrice(), product.getImgUrl(), product.getCategories());
         productDTO.setId(product.getId());
         productDTO.setName(product.getName());
         productDTO.setDescription(product.getDescription());
@@ -35,6 +44,16 @@ public class ProductService {
         productDTO.setImgUrl(product.getImgUrl());
         productDTO.setCategories(product.getCategories());
         return productDTO;
+    }
+
+    public Product productDTOToProduct(ProductDTO productDTO) {
+        Product product = new Product();
+        product.setName(productDTO.getName());
+        product.setDescription(productDTO.getDescription());
+        product.setPrice(productDTO.getPrice());
+        product.setImgUrl(productDTO.getImgUrl());
+        product.setCategories(productDTO.getCategories());
+        return product;
     }
 
 }

@@ -15,7 +15,7 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/{id}") //localhost:8080/api/products/1
     public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) {
         ProductDTO productDTO = productService.findById(id);
         return ResponseEntity.ok(productDTO);
