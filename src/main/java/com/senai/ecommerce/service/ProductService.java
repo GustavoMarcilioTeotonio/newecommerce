@@ -2,6 +2,7 @@ package com.senai.ecommerce.service;
 
 import com.senai.ecommerce.Repository.ProductRepository;
 import com.senai.ecommerce.dtos.ProductDTO;
+import com.senai.ecommerce.entities.Category;
 import com.senai.ecommerce.entities.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,14 +36,28 @@ public class ProductService {
 
     }
 
+    @Transactional
+    public ProductDTO update(Long id, ProductDTO productDTO) {
+        Product product = productDTOToProduct(productDTO);
+        product.setId(id);
+        // o repository não consegue salvar um DTO, ele salva um entity
+        product = productRepository.save(product);
+        return productToProductDTO(product);
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        productRepository.deleteById(id);
+    }
+
     public ProductDTO productToProductDTO(Product product) {
-        ProductDTO productDTO = new ProductDTO(product.getId(), product.getName(), product.getDescription(), product.getPrice(), product.getImgUrl(), product.getCategories());
+        ProductDTO productDTO = new ProductDTO();
         productDTO.setId(product.getId());
         productDTO.setName(product.getName());
         productDTO.setDescription(product.getDescription());
         productDTO.setPrice(product.getPrice());
         productDTO.setImgUrl(product.getImgUrl());
-        productDTO.setCategories(product.getCategories());
+        productDTO.setCategories((List<Category>) product.getCategories());
         return productDTO;
     }
 
