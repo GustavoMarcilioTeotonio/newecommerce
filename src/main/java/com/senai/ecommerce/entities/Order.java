@@ -15,7 +15,7 @@ public class Order {
     private Instant moment;
     private OrderStatus status;
 
-    @ManyToMany
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
     //cascade serve to delete the order when the user is deleted

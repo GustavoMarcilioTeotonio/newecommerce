@@ -23,6 +23,7 @@ public class Product {
     private String name;
     private String description;
     private double price;
+    @Column(columnDefinition = "TEXT")
     private String imgUrl;
 
     @ManyToMany
